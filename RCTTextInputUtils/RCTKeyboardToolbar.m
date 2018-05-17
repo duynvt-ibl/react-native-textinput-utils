@@ -52,7 +52,7 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
         }
         else {
             RCTTextField *reactNativeTextView = ((RCTTextField *)view);
-            textView = [reactNativeTextView textField];
+            textView = reactNativeTextView;
         }
         
         if (options[@"tintColor"]) {
@@ -106,7 +106,7 @@ RCT_EXPORT_METHOD(configure:(nonnull NSNumber *)reactNode
         }
         
         [numberToolbar sizeToFit];
-        textView.inputAccessoryView = numberToolbar;
+        //textView.inputAccessoryView = numberToolbar;
         
         callback(@[[NSNull null], [currentUid stringValue]]);
     }];
@@ -129,44 +129,44 @@ RCT_EXPORT_METHOD(dismissKeyboard:(nonnull NSNumber *)reactNode) {
 }
 
 RCT_EXPORT_METHOD(moveCursorToLast:(nonnull NSNumber *)reactNode) {
-    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry ) {
-        
-        UIView *view = viewRegistry[reactNode];
-        if (!view) {
-            RCTLogError(@"RCTKeyboardToolbar: TAG #%@ NOT FOUND", reactNode);
-            return;
-        }
-        RCTTextField *textView = ((RCTTextField *)view);
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UITextPosition *position = [textView.backedTextInputView endOfDocument];
-            textView.backedTextInputView.selectedTextRange = [textView.backedTextInputView textRangeFromPosition:position toPosition:position];
-        });
-    }];
+//    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry ) {
+//        
+//        UIView *view = viewRegistry[reactNode];
+//        if (!view) {
+//            RCTLogError(@"RCTKeyboardToolbar: TAG #%@ NOT FOUND", reactNode);
+//            return;
+//        }
+//        RCTTextField *textView = ((RCTTextField *)view);
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            UITextPosition *position = [textView endOfDocument];
+//            textView.selectedTextRange = [textView textRangeFromPosition:position toPosition:position];
+//        });
+//    }];
 }
 
 RCT_EXPORT_METHOD(setSelectedTextRange:(nonnull NSNumber *)reactNode
                   options:(NSDictionary *)options) {
-    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry ) {
-        
-        UIView *view = viewRegistry[reactNode];
-        if (!view) {
-            RCTLogError(@"RCTKeyboardToolbar: TAG #%@ NOT FOUND", reactNode);
-            return;
-        }
-        RCTTextField *textView = ((RCTTextField *)view);
-        
-        NSNumber *startPosition = [RCTConvert NSNumber:options[@"start"]];
-        NSNumber *endPosition = [RCTConvert NSNumber:options[@"length"]];
-        
-        NSRange range  = NSMakeRange([startPosition integerValue], [endPosition integerValue]);
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            UITextPosition *from = [textView.backedTextInputView positionFromPosition:[textView.backedTextInputView beginningOfDocument] offset:range.location];
-            UITextPosition *to = [textView.backedTextInputView positionFromPosition:from offset:range.length];
-            [textView.backedTextInputView setSelectedTextRange:[textView.backedTextInputView textRangeFromPosition:from toPosition:to]];
-        });
-    }];
+//    [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry ) {
+//        
+//        UIView *view = viewRegistry[reactNode];
+//        if (!view) {
+//            RCTLogError(@"RCTKeyboardToolbar: TAG #%@ NOT FOUND", reactNode);
+//            return;
+//        }
+//        RCTTextField *textView = ((RCTTextField *)view);
+//        
+//        NSNumber *startPosition = [RCTConvert NSNumber:options[@"start"]];
+//        NSNumber *endPosition = [RCTConvert NSNumber:options[@"length"]];
+//        
+//        NSRange range  = NSMakeRange([startPosition integerValue], [endPosition integerValue]);
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            UITextPosition *from = [textView positionFromPosition:[textView beginningOfDocument] offset:range.location];
+//            UITextPosition *to = [textView positionFromPosition:from offset:range.length];
+//            [textView setSelectedTextRange:[textView textRangeFromPosition:from toPosition:to]];
+//        });
+//    }];
 }
 
 RCT_EXPORT_METHOD(setDate:(nonnull NSNumber *)reactNode
@@ -197,21 +197,12 @@ RCT_EXPORT_METHOD(setPickerRowByIndex:(nonnull NSNumber *)reactNode
             return;
         }
         
-        UITextField *textView;
-        if ([view class] == [RCTTextView class]) {
-            RCTTextView *reactNativeTextView = ((RCTTextView *)view);
-            textView = [reactNativeTextView getTextView];
-        }
-        else {
-            RCTTextField *reactNativeTextView = ((RCTTextField *)view);
-            textView = [reactNativeTextView textField];
-        }
+        UIPickerView *pickerView = ((UIPickerView *)view.inputView);
         
-        UIPickerView *pickerView = ((UIPickerView *)textView.inputView);
-        
-        NSInteger index = [RCTConvert NSInteger:options[@"index"]];
+        NSInteger *index = [RCTConvert NSInteger:options[@"index"]];
         
         [pickerView selectRow: index inComponent:0 animated:YES];
+        
     }];
 }
 

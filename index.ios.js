@@ -4,7 +4,7 @@ const React = require('react');
 
 const {findNodeHandle, TextInput, NativeAppEventEmitter, NativeModules: {
         KeyboardToolbar
-    }, processColor, Keyboard} = require('react-native');
+    }, processColor} = require('react-native');
 
 class RCTKeyboardToolbarHelper {
     static sharedInstance = new RCTKeyboardToolbarHelper();
@@ -77,9 +77,8 @@ class RCTKeyboardToolbarManager {
         });
     }
     static dismissKeyboard(node) {
-        // var nodeHandle = findNodeHandle(node);
-        // KeyboardToolbar.dismissKeyboard(nodeHandle);
-		Keyboard.dismiss();
+        var nodeHandle = findNodeHandle(node);
+        KeyboardToolbar.dismissKeyboard(nodeHandle);
     }
     static moveCursorToLast(node) {
         var nodeHandle = findNodeHandle(node);
@@ -174,9 +173,6 @@ class RCTKeyboardToolbarTextInput extends React.Component {
     }
     focus() {
         this.refs.input.focus();
-    }
-    clear() {
-        this.refs.input.clear();
     }
     render() {
         return (<TextInput {...this.props} ref="input"/>);

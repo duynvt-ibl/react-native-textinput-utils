@@ -16,8 +16,4 @@
     return [self valueForKey:@"_textView"];
 }
 
-- (void)invalidateInputAccessoryView {
-    // prevents input accessory being removed
-}
-
 @end
